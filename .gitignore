@@ -1,6 +1,7 @@
 .idea
 .vscode
 .env
+.phpintel/
 storage/
 /vendor/
 node_modules/
