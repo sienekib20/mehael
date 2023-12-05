@@ -1,0 +1,6 @@
+.idea
+.vscode
+.env
+storage/
+/vendor/
+node_modules/

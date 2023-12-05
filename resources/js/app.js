@@ -1,0 +1,1 @@
+console.log('sienekib v.1');
