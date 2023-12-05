@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'sienekib/mehael',
-        'pretty_version' => '1.0.0+no-version-set',
-        'version' => '1.0.0.0',
-        'reference' => NULL,
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
+        'reference' => '6b97d8fdb3b59c179926b8a397d781296d4afa61',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -47,9 +47,9 @@
             'dev_requirement' => true,
         ),
         'sienekib/mehael' => array(
-            'pretty_version' => '1.0.0+no-version-set',
-            'version' => '1.0.0.0',
-            'reference' => NULL,
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'reference' => '6b97d8fdb3b59c179926b8a397d781296d4afa61',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
