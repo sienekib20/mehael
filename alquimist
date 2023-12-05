@@ -1,0 +1,8 @@
+<?php
+
+// Incluindo o auto carregador de classes
+require __DIR__ . '/vendor/autoload.php';
+
+// Executando o console
+$alquimist = new Sienekib\Mehael\Console\Alquimist();
+$alquimist->execute($argv, $argc);
