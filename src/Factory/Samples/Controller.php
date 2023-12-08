@@ -44,8 +44,6 @@ class {controller} extends Controller
 	{
 		// TODO: coloqe o seu código
 
-		$this->sms->system_error('mensagem'); // esse vai vir do controller
-
 		return redirect()->backWith('success', 'mensagem de sucesso');
 	}
 

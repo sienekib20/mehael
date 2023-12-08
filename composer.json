@@ -14,7 +14,7 @@
         "psr-4": {
             "App\\": "app/",
             "Sienekib\\Mehael\\": "src/",
-            "Database\\Factory\\": "seeders/"
+            "Database\\Factory\\": "database/seeders/"
         },
         "files": [
             "routes/web.php"
