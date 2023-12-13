@@ -13,7 +13,7 @@ class {migration}
 			#  -- coloque aqui o seu sql
 
 			`created_at` timestamp not null default current_timestamp,
-			`updated_at` timestamp null
+			`updated_at` timestamp null,
 			primary key(`{table_id}`)
 		");
 	}

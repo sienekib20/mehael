@@ -23,8 +23,7 @@ class Connection
                 ]
             );
         } catch (PDOException $e) {
-            echo $e->getMessage();
-            exit;
+            throw new \Exception($e->getMessage());
         }
     }
 

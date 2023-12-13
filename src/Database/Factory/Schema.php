@@ -14,6 +14,7 @@ class Schema
             (new Connection())->getConnection()->exec("CREATE TABLE IF NOT EXISTS $table ($sql)");
         } catch (PDOException $e) {
             echo $e->getMessage();
+            exit;
         }
     }
 
@@ -23,6 +24,19 @@ class Schema
             (new Connection())->getConnection()->exec("DROP TABLE IF EXISTS $table");
         } catch (PDOException $e) {
             echo $e->getMessage();
+            exit;
+        }
+    }
+
+    public static function dropDbAndCreate(string $db)
+    {
+        try {
+            (new Connection())->getConnection()->exec("DROP DATABASE IF EXISTS $db");
+            (new Connection())->getConnection()->exec("CREATE DATABASE IF NOT EXISTS $db");
+            (new Connection())->getConnection()->exec("USE $db");
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            exit;
         }
     }
 }

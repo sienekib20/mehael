@@ -2,6 +2,7 @@
 
 use Sienekib\Mehael\Bootstrap\Application;
 use Sienekib\Mehael\Http\Response;
+use Sienekib\Mehael\Support\Flash;
 use Sienekib\Mehael\Support\Session;
 use Sienekib\Mehael\Http\Request;
 use Sienekib\Mehael\Http\Src\Redirect;
@@ -59,7 +60,7 @@ endif;
 if (!function_exists('redirect')) :
 	function redirect()
 	{
-		return (new Redirect());
+		return new Redirect();
 	}
 endif;
 
@@ -92,7 +93,7 @@ if (!function_exists('asset_path')) :
 
     function asset_path()
     {
-        return '/assets/';
+        return  '/assets/';
     }
 
 endif;
@@ -123,6 +124,15 @@ if (!function_exists('session')) :
     function session()
     {
         return (new Session());
+    }
+
+endif;
+
+if (!function_exists('flash')) :
+
+    function flash()
+    {
+        return (new Flash());
     }
 
 endif;

@@ -147,7 +147,7 @@ class Database
 		}
 	}
 
-	public function selet(string $fields)
+	public function select(string $fields)
 	{
 		$this->fields = $fields;
 

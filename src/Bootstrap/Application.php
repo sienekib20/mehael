@@ -31,6 +31,7 @@ class Application
 		try {
 			$this->connection->initDBConnection();
 			$this->route->dispatch();
+			session()->destroyFlash();
 		} catch (\Exception $e) {
 			$this->whoops->handleException($e);
 		}

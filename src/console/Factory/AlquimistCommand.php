@@ -4,6 +4,7 @@ namespace Sienekib\Mehael\Console\Factory;
 
 use Database\Factory\DatabaseSeeders;
 use Sienekib\Mehael\Console\Printer;
+use Sienekib\Mehael\Database\Factory\Schema;
 
 class AlquimistCommand
 {
@@ -11,6 +12,7 @@ class AlquimistCommand
     private Printer $printer;
     private string $app = 'app/';
     private string $database = 'database/migrations';
+    private string $seeder = 'database/seeders';
 
     public function __construct()
     {
@@ -29,6 +31,9 @@ class AlquimistCommand
             case 'run:server':
                 $this->runServer();
                 break;
+            case 'storage:link':
+                $this->storage(true);
+                break;
             case 'make:class':
                 if (!isset($argv[2]))
                     $this->printer->withError('Usage: php alquimist make:class <name>')->exit();
@@ -44,6 +49,11 @@ class AlquimistCommand
                     $this->printer->withError('Usage: php alquimist make:migration <name>')->exit();
                 $this->make_migration($argv[2]);
                 break;
+            case 'make:seeder':
+                if (!isset($argv[2]))
+                    $this->printer->withError('Usage: php alquimist make:seeder <name>')->exit();
+                $this->make_seeder($argv[2]);
+                break;
             case 'make:model':
                 if (!isset($argv[2]))
                     $this->printer->withError('Usage: php alquimist make:model <name>')->exit();
@@ -55,6 +65,33 @@ class AlquimistCommand
             default:
                 $this->printer->withError("Unknown command: {$command}")->exit();
         }
+    }
+
+    private function buildStorageCommand(string $target, string $user)
+    {
+        $sistemaOperacional = PHP_OS;
+
+        switch (true) {
+            case stripos($sistemaOperacional, 'WIN') !== false:
+                return "cacls $target /E /G $user:R";
+            case stripos($sistemaOperacional, 'Linux') !== false:
+            case stripos($sistemaOperacional, 'Darwin') !== false:
+                return "chmod -R 755 $target";
+            default:
+                return null; // Sistema operacional não reconhecido
+        }
+    }
+
+    private function storage($link = true)
+    {
+        $user = get_current_user();
+        $target = abs_path() . '/public/';
+        $link = abs_path() . '/storage/';
+
+        $v = @link('public/', 'storage/leiame.txt');
+
+        var_dump($v);
+        exit;
     }
 
     private function make_class(string $name)
@@ -152,6 +189,12 @@ class AlquimistCommand
         $this->make('migration', $path, $name);
     }
 
+    private function make_seeder(string $name)
+    {
+        $path = $this->seeder;
+        $this->make('seeder', $path, $name);
+    }
+
     private function make_model(string $name)
     {
         $path = $this->app . 'Models';
@@ -167,11 +210,20 @@ class AlquimistCommand
         echo "\033[0;33mMigrations created successfully\033[0m" . PHP_EOL;
         sleep(0.8);
 
+        //var_dump(env('DB_DATABASE'));exit;
+        if (env('DB_DATABASE') == null)
+            die ('Invalid database name');
+
+        Schema::dropDbAndCreate(env('DB_DATABASE'));
+        
         $inverted_actions = [];
 
         for ($i = count($migrations) - 1; $i >= 0; $i--) {
+            //for ($i = 0; $i < count($migrations); $i++) {
             $filename = $migrations[$i];
             $migration = dirname(__DIR__, 3) . '/' . $this->database . "/$filename";
+
+            //var_dump($migration);exit;
 
             include $migration;
             $filename = pathinfo($filename, PATHINFO_FILENAME);
@@ -196,10 +248,10 @@ class AlquimistCommand
         for ($i = count($inverted_actions) - 1; $i >= 0; $i--) {
             $filename = pathinfo($migrations[$i], PATHINFO_FILENAME);
             echo "\033[0;32mMigrating: $filename\033[0m" . PHP_EOL;
-            sleep(1);
+            sleep(date('s')/60);
             $inverted_actions[$i]->up();
             echo "\033[0;33mMigrated: $filename (" . date('m:s') . "ms)\033[0m" . PHP_EOL;
-            sleep(0.8);
+            sleep(date('s')/60);
         }
 
         $db_seeder = new DatabaseSeeders();

@@ -6,7 +6,7 @@ trait Uri
 {
     public function uri()
     {
-        return $_SERVER['REQUEST_URI'];
+        return $_SERVER['REQUEST_URI'] ?? '';
     }
 
     public function path()
@@ -16,6 +16,6 @@ trait Uri
 
     public function method()
     {
-        return $_SERVER['REQUEST_METHOD'];
+        return $_SERVER['REQUEST_METHOD'] ?? 'GET';
     }
 }
