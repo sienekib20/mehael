@@ -6,7 +6,18 @@ trait Uri
 {
     public function uri()
     {
-        return $_SERVER['REQUEST_URI'] ?? '';
+        $uri = $_SERVER['REQUEST_URI'] ?? '';
+
+        $prefix = $this->prefix();
+
+        $uri = explode($prefix, $uri);
+
+        return end($uri);
+    }
+
+    private function prefix()
+    {
+        return basename(abs_path());
     }
 
     public function path()

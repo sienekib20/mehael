@@ -11,6 +11,10 @@ class Response
     public function __construct()
     {
         //$this->headers = getallheaders();
+        $this->setHeader('Access-Control-Allow-Origin','*');
+        $this->setHeader('Access-Control-Allow-Headers','*');
+        $this->setHeader('Access-Control-Allow-Credentials','true');
+        $this->setHeader('Access-Control-Allow-Methods','GET, POST, OPTIONS');
     }
 
     public function setStatusCode(int $status)
@@ -20,12 +24,16 @@ class Response
         http_response_code($this->status_code);
     }
 
-    public function json(array $data)
+    public function json(mixed $data)
     {
+        $data = (is_array($data)) ? $data : [$data];
+
         $this->setHeader("Content-Type", "application/json");
         $this->applyHeaders();
 
-        echo json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        echo json_encode($data, JSON_UNESCAPED_UNICODE);
+
+        exit;
     }
 
     public function setHeader(string $type, string $value)

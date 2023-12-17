@@ -71,6 +71,7 @@ if (!function_exists('response')) :
 	}
 endif;
 
+
 if (!function_exists('parts')) :
 
     function parts($part)
@@ -93,6 +94,10 @@ if (!function_exists('asset_path')) :
 
     function asset_path()
     {
+    	$asset_path = (parse_url($_SERVER['REQUEST_URI']) == '/') 
+    		? '/assets/' 
+    		: env('APP_URL') . '/' . basename(abs_path()) . '/public/assets/';
+
         return  '/assets/';
     }
 

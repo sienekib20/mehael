@@ -73,10 +73,12 @@ class AlquimistCommand
 
         switch (true) {
             case stripos($sistemaOperacional, 'WIN') !== false:
-                return "cacls $target /E /G $user:R";
+                exec("cacls $target /E /G $user:R");
+                return $target;
             case stripos($sistemaOperacional, 'Linux') !== false:
             case stripos($sistemaOperacional, 'Darwin') !== false:
-                return "chmod -R 755 $target";
+                exec("chmod -R 755 $target");
+                return $target;
             default:
                 return null; // Sistema operacional não reconhecido
         }
@@ -84,14 +86,86 @@ class AlquimistCommand
 
     private function storage($link = true)
     {
-        $user = get_current_user();
-        $target = abs_path() . '/public/';
-        $link = abs_path() . '/storage/';
+        $source = abs_path() . '/storage';
+        $destination = abs_path() . '/public/storage';
+        //$command = 'ln -s ' . escapeshellarg($source) . ' ' . escapeshellarg($destination);
 
-        $v = @link('public/', 'storage/leiame.txt');
+        $lnCommand = 'ln -s ' . escapeshellarg($source) . ' ' . escapeshellarg($destination);
 
-        var_dump($v);
-        exit;
+        
+       // Construir o comando mklink dentro do comando runas
+       $mklinkCommand = 'mklink /J ' . escapeshellarg($destination) . ' ' . escapeshellarg($source);
+
+
+       // Construir o comando runas com o comando mklink incorporado
+       //$command = 'runas /user:Administrator "cmd /C ' . $mklinkCommand . '"';
+
+       // Executar o comando e capturar a saída
+       $output = shell_exec($mklinkCommand);
+
+       // Exibir a saída (pode ser útil para fins de depuração)
+       echo $output;
+
+       // Encerrar o script
+       exit;    
+
+        /*$user = get_current_user();
+        //$target = $this->buildStorageCommand(abs_path() . '/storage', $user);
+
+        /*var_dump($target);exit;
+        $link = 'store';*/
+
+        //$v = @link('public/', 'storage/leiame.txt');
+        /*$re = symlink($target, $link);
+
+        var_dump($re);
+        exit;*/
+        /*1º – primeiro
+        2º – segundo
+        3º – terceiro
+        4º – quarto
+        5º – quinto
+        6º – sexto
+        7º – sétimo
+        8º – oitavo
+        9º – nono
+        10º – décimo
+        11º – décimo primeiro
+        12º – décimo segundo
+        13º – décimo terceiro
+        14º – décimo quarto
+        15º – décimo quinto
+        16º – décimo sexto
+        17º – décimo sétimo
+        18º – décimo oitavo
+        19º – décimo nono
+        20º – vigésimo
+        21º – vigésimo primeiro
+        22º – vigésimo segundo
+        23º – vigésimo terceiro
+        24º – vigésimo quarto
+        25º – vigésimo quinto
+        26º – vigésimo sexto
+        27º – vigésimo sétimo
+        28º – vigésimo oitavo
+        29º – vigésimo nono
+        30º – trigésimo
+        40º – quadragésimo
+        50º – quinquagésimo
+        60º – sexagésimo
+        70º – septuagésimo
+        80º – octogésimo
+        90º – nonagésimo
+        100º – centésimo
+        200º – ducentésimo
+        300º – tricentésimo
+        400º – quadringentésimo
+        500º – quingentésimo
+        600º – sexcentésimo
+        700º – septingentésimo
+        800º – octingentésimo
+        900º – nongentésimo
+        1000º – milésimo*/
     }
 
     private function make_class(string $name)

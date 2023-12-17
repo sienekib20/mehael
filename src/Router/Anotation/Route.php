@@ -129,8 +129,8 @@ class Route extends AbstractRoute
 			}
 		}
 
-		echo 'Rota `'. static::$request->uri() .'` não encontrada';
 		static::$response->setStatusCode(404);
+		throw new Exception('Rota `'. static::$request->uri() .'` não encontrada');
 		exit;
 	}
 }

@@ -46,28 +46,52 @@ class Database
 
 	public function insert(array $data)
 	{
-		try {
-			$data = is_array(array_values($data)[0]) ? $data : [$data];
+		return $this->buildInsert($data);
+	}
 
-			array_map(function ($data) {
+	public function buildInsert(array $data, bool $last = false)
+	{
+		try {
+			$builded = is_array(array_values($data)[0]) ? $data : [$data];
+
+
+			//array_map(function ($data) 
+			foreach ($builded as $data) {
 				$columns = implode(', ', array_keys($data));
 				$wildcards =  implode(', ', array_pad([], count($data), '?'));
 				$sql = "INSERT INTO {$this->table}($columns) VALUES($wildcards)";
 
 				$this->connection->beginTransaction();
 				$stmt = $this->connection->prepare($sql);
+					return $sql;
 				for ($i = 1; $i <= count($values = array_values($data)); $i++) {
 					$stmt->bindValue($i, $values[$i - 1]);
 				}
+
+
 				$stmt->execute();
-				$this->connection->commit();
-				return $this->connection->lastInsertId();
-			}, $data);
+
+				return ($last) 
+					? $this->lastId() 
+					: $this->connection->commit();
+
+			}//, $builded);
 		} catch (PDOException $e) {
 			$this->connection->rollBack();
-			echo $e->getMessage();
-			exit;
+			response()->setStatusCode(500);
+			throw new \Exception($e->getMessage());
 		}
+	}
+
+	public function insertId(array $data)
+	{
+		return $this->buildInsert($data, true);
+	}
+
+	private function lastId()
+	{
+	    $stmt = $this->connection->query("SELECT LAST_INSERT_ID()");
+	    return $stmt->fetchColumn();
 	}
 
 	public function update(array $data)
