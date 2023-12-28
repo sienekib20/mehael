@@ -25,6 +25,7 @@ trait PathBuilder
                     $pattern = $this->correspondant($pattern);
                     $parameters[] = $param;
                     $route .= "$pattern/";
+
                 }
             }
         }

@@ -12,7 +12,7 @@ class Connection
     public function initDBConnection()
     {
         try {
-            $this->connection = new PDO(
+            if (!($this->connection = new PDO(
                 "mysql:host=" . env('DB_HOST') . ";dbname=" . env('DB_DATABASE', 'master'),
                 env('DB_USERNAME'),
                 env('DB_PASSWORD'),
@@ -21,7 +21,9 @@ class Connection
                     PDO::ATTR_PERSISTENT => true,
                     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ
                 ]
-            );
+            ))) {
+                throw new \Exception('Connection error');
+            }
         } catch (PDOException $e) {
             throw new \Exception($e->getMessage());
         }

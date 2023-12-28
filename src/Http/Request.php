@@ -88,13 +88,13 @@ class Request
 
         if ($this->method() == 'GET') {
             foreach ($_GET as $key => $value) {
-                $this->data[$key] = strip_tags($value);
+                $this->data[$key] = ($this->isXmlHttpRequest()) ? $value : strip_tags($value);
             }
         }
 
         if ($this->method() == 'POST') {
             foreach ($_POST as $key => $value) {
-                $this->data[$key] = strip_tags($value);
+                $this->data[$key] = ($this->isXmlHttpRequest()) ? $value : strip_tags($value);
             }
         }
 
@@ -104,5 +104,10 @@ class Request
     public function __get($key)
     {
         return $this->data[$key] ?? null;
+    }
+
+    private function isXmlHttpRequest()
+    {
+        return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
     }
 }

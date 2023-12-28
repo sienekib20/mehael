@@ -1,10 +1,11 @@
 <?php
+declare(strict_types=1);
 
 namespace Sienekib\Mehael\Router\Src;
 
 class Wildcards
 {
-    public static function foundWildcards(string $route) : bool
+    public static function foundWildcards(string $route) : int
     {
         $pattern = "/^\/([a-zA-Z\_]+)\/\(([a-z]+):([a-z]+)\)/";
 
